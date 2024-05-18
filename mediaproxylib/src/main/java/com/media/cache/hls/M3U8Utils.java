@@ -8,6 +8,7 @@ import com.media.cache.VideoCacheException;
 import com.media.cache.utils.DownloadExceptionUtils;
 import com.media.cache.utils.HttpUtils;
 import com.media.cache.utils.LocalProxyUtils;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -62,7 +63,7 @@ public class M3U8Utils {
         String encryptionKeyUri = null;
         String line = null;
         boolean isM3U8 = false;
-        while ((line = bufferedReader.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
             if (line.startsWith(M3U8Constants.TAG_PREFIX)) {
                 isM3U8 = true;
                 if (line.startsWith(M3U8Constants.TAG_MEDIA_DURATION)) {
@@ -207,7 +208,7 @@ public class M3U8Utils {
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(keyURL.openStream()));
                         StringBuilder textBuilder = new StringBuilder();
                         String line = null;
-                        while ((line = bufferedReader.readLine()) != null) {
+                        while ((line = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
                             textBuilder.append(line);
                         }
                         boolean isMessyStr = LocalProxyUtils.isMessyCode(textBuilder.toString());
