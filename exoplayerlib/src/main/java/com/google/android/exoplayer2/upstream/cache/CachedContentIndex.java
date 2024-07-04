@@ -45,6 +45,7 @@ import java.io.OutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -515,7 +516,7 @@ import org.checkerframework.checker.nullness.compatqual.NullableType;
       this.encrypt = encrypt;
       this.cipher = cipher;
       this.secretKeySpec = secretKeySpec;
-      random = encrypt ? new Random() : null;
+      random = encrypt ? new SecureRandom() : null;
       atomicFile = new AtomicFile(file);
     }
 
