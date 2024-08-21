@@ -1,6 +1,7 @@
 package com.media.cache.proxy;
 
 import com.media.cache.utils.LocalProxyUtils;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -129,7 +130,7 @@ public class HttpRequest {
                               Map<String, String> headers) throws Exception {
         try {
             // Read the request line
-            String readLine = headerReader.readLine();
+            String readLine = BoundedLineReader.readLine(headerReader, 5_000_000);
             if (readLine == null) {
                 return;
             }
@@ -168,14 +169,14 @@ public class HttpRequest {
             }
 
             //parse headers:
-            String line = headerReader.readLine();
+            String line = BoundedLineReader.readLine(headerReader, 5_000_000);
             while (line != null && !line.trim().isEmpty()) {
                 int index = line.indexOf(':');
                 if (index >= 0 && index < line.length()) {
                     headers.put(line.substring(0, index).trim().
                             toLowerCase(Locale.US), line.substring(index + 1).trim());
                 }
-                line = headerReader.readLine();
+                line = BoundedLineReader.readLine(headerReader, 5_000_000);
             }
 
             extraInfo.put("uri", uri);
