@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.android.baselib.utils.LogUtils;
 import com.media.cache.model.VideoCacheInfo;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -53,7 +54,7 @@ public class LocalProxyUtils {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
         StringBuilder builder = new StringBuilder();
         String line;
-        while (!TextUtils.isEmpty(line = reader.readLine())){
+        while (!TextUtils.isEmpty(line = BoundedLineReader.readLine(reader, 5_000_000))){
             builder.append(line)
                     .append("\n");
         }
