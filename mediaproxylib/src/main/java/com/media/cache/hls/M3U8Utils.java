@@ -8,6 +8,8 @@ import com.media.cache.VideoCacheException;
 import com.media.cache.utils.DownloadExceptionUtils;
 import com.media.cache.utils.HttpUtils;
 import com.media.cache.utils.LocalProxyUtils;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -33,7 +35,7 @@ public class M3U8Utils {
      * @throws IOException
      */
     public static M3U8 parseM3U8Info(LocalProxyConfig config, String videoUrl, boolean isLocalFile, File m3u8File) throws IOException, VideoCacheException {
-        URL url = new URL(videoUrl);
+        URL url = Urls.create(videoUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
         if (isLocalFile) {
@@ -203,7 +205,7 @@ public class M3U8Utils {
                     if (m3u8Ts.getKeyUri() != null) {
                         String keyUri = m3u8Ts.getKeyUri();
                         key += ",URI=\"" + keyUri + "\"";
-                        URL keyURL = new URL(keyUri);
+                        URL keyURL = Urls.create(keyUri, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(keyURL.openStream()));
                         StringBuilder textBuilder = new StringBuilder();
                         String line = null;

@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.android.baselib.utils.LogUtils;
 import com.media.cache.LocalProxyConfig;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -40,7 +42,7 @@ public class HttpUtils {
         String mimeType = null;
         URL url = null;
         try {
-            url = new URL(videoUrl);
+            url = Urls.create(videoUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
             LogUtils.w("VideoUrl(" + videoUrl +") packages error, exception = " + e.getMessage());
             throw new MalformedURLException("URL parse error.");
@@ -77,7 +79,7 @@ public class HttpUtils {
     public static String getFinalUrl(LocalProxyConfig config, String videoUrl, HashMap<String, String> headers) throws IOException {
         URL url = null;
         try {
-            url = new URL(videoUrl);
+            url = Urls.create(videoUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
             LogUtils.w("VideoUrl(" + videoUrl +") packages error, exception = " + e.getMessage());
             throw new MalformedURLException("URL parse error.");
@@ -129,7 +131,7 @@ public class HttpUtils {
         if (location == null) {
             throw new ProtocolException("Null location redirect");
         }
-        URL url = new URL(originalUrl, location);
+        URL url = Urls.create(originalUrl, location, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         String protocol = url.getProtocol();
         if (!"https".equals(protocol) && !"http".equals(protocol)) {
             throw new ProtocolException("Unsupported protocol redirect: " + protocol);

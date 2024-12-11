@@ -9,6 +9,8 @@ import com.media.cache.utils.DownloadExceptionUtils;
 import com.media.cache.utils.HttpUtils;
 import com.media.cache.utils.LocalProxyThreadUtils;
 import com.media.cache.utils.LocalProxyUtils;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import java.io.File;
 import java.io.IOException;
@@ -530,7 +532,7 @@ public class BaseVideoDownloadTask extends VideoDownloadTask {
     private HttpURLConnection openConnection(String videoUrl)
             throws IOException {
         HttpURLConnection connection;
-        URL url = new URL(videoUrl);
+        URL url = Urls.create(videoUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         connection = (HttpURLConnection)url.openConnection();
         if (mConfig.shouldIgnoreAllCertErrors() && connection instanceof HttpsURLConnection) {
             HttpUtils.trustAllCert((HttpsURLConnection)(connection));
