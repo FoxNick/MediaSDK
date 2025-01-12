@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.analytics.AnalyticsListener.EventTime;
 import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Util;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
@@ -39,7 +40,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 public final class DefaultPlaybackSessionManager implements PlaybackSessionManager {
 
-  private static final Random RANDOM = new Random();
+  private static final Random RANDOM = new SecureRandom();
   private static final int SESSION_ID_LENGTH = 12;
 
   private final Timeline.Window window;
