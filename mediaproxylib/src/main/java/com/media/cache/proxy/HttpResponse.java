@@ -6,6 +6,8 @@ import com.android.baselib.utils.LogUtils;
 import com.media.cache.LocalProxyConfig;
 import com.media.cache.utils.HttpUtils;
 import com.media.cache.utils.LocalProxyUtils;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -122,7 +124,7 @@ public class HttpResponse {
         boolean redirected;
         int redirectedCount = 0;
         do {
-            URL url = new URL(videoUrl);
+            URL url = Urls.create(videoUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             connection = (HttpURLConnection)url.openConnection();
             if (mConfig.shouldIgnoreAllCertErrors() && connection instanceof HttpsURLConnection) {
                 HttpUtils.trustAllCert((HttpsURLConnection)(connection));
